@@ -100,7 +100,7 @@ class HashTable:
             while current_pointer.next:
                 current_pointer = current_pointer.next
                 values.append(current_pointer.value)
-            return values
+            return str(values)[1:-1]
         else:
             return None
 
@@ -116,10 +116,11 @@ class HashTable:
         tempstorage = self.storage
         self.storage = [None] * self.capacity
         for i in tempstorage:
-            self.insert(i.key, i.value)
-            while i.next:
-                i = i.next
+            if i:
                 self.insert(i.key, i.value)
+                while i.next:
+                    i = i.next
+                    self.insert(i.key, i.value)
 
 
 
