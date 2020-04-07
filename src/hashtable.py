@@ -61,8 +61,17 @@ class HashTable:
             return
         else:
             current_pointer = self.storage[self._hash_mod(key)]
+            if current_pointer.key == key:
+                current_pointer.value = value
+                return
             while current_pointer.next:
                 current_pointer = current_pointer.next
+                if current_pointer.key == key:
+                    current_pointer.value = value
+                    return
+                # if self.storage[self._hash_mod(key)].key == key:
+                #     self.storage[self._hash_mod(key)].value = value
+                #     return
             # current_pointer = current_pointer.next
             current_pointer.next = LinkedPair(key, value)
             return
@@ -78,11 +87,40 @@ class HashTable:
 
         Fill this in.
         '''
-        if self.storage[self._hash_mod(key)]:
-            del(self.storage[self._hash(key)])
+        # while self.storage[self._hash_mod(key)].next:
+
+        starting_pointer = self.storage[self._hash_mod(key)]
+        if self.storage[self._hash_mod(key)].key == key:
+            if self.storage[self._hash_mod(key)].next:
+                self.storage[self._hash_mod(key)] = self.storage[self._hash_mod(key)].next
+                # print("test1")
+                # print(f"{key}")
+                return
+            self.storage[self._hash_mod(key)] = None
             return
-        else:
-            return "key not found"
+        # current_pointer = self.storage[self._hash_mod(key)]
+        while self.storage[self._hash_mod(key)].next:
+            if self.storage[self._hash_mod(key)].next.key == key:
+                if self.storage[self._hash_mod(key)].next.next:
+                    self.storage[self._hash_mod(key)] = self.storage[self._hash_mod(key)].next.next
+                self.storage[self._hash_mod(key)].next = None
+                self.storage[self._hash_mod(key)] = starting_pointer
+                return
+            self.storage[self._hash_mod(key)] = self.storage[self._hash_mod(key)].next
+        print("key is not found")
+        self.storage[self._hash_mod(key)] = starting_pointer
+
+            # previous_pointer = self.storage[self._hash_mod(key)]
+            # self.storage[self._hash_mod(key)] = self.storage[self._hash_mod(key)].next
+            # if self.storage[self._hash_mod(key)].key == key:
+            #     if self.storage[self._hash_mod(key)].next:
+            #         next_pointer = self.storage[self._hash_mod(key)].next
+            #         previous_pointer.next = next_pointer
+            #     self.storage[self._hash_mod(key)] = None
+                # current_pointer = None
+                # return
+            # current_pointer = current_pointer.next
+            
 
 
     def retrieve(self, key):
@@ -94,15 +132,23 @@ class HashTable:
         Fill this in.
         '''
         if self.storage[self._hash_mod(key)]:
-            values = []
-            values.append(self.storage[self._hash_mod(key)].value)
+            # values = []
+            # values.append(self.storage[self._hash_mod(key)].value)
             current_pointer = self.storage[self._hash_mod(key)]
+            if current_pointer.key == key:
+                # print(current_pointer.value)
+                return current_pointer.value
             while current_pointer.next:
                 current_pointer = current_pointer.next
-                values.append(current_pointer.value)
-            return str(values)[1:-1]
-        else:
-            return None
+                if current_pointer.key == key:
+                    # print(current_pointer.value)
+                    return current_pointer.value
+                # values.append(current_pointer.value)
+        # print(f"not found value for key: {key}")
+        return None
+            # return self.storage[self._hash_mod(key)].value
+        # else:
+        #     return None
 
 
     def resize(self):
